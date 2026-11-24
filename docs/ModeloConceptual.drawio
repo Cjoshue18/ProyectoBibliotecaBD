@@ -186,7 +186,7 @@
         <mxCell id="A_EJE_1" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" value="&lt;span style=&quot;border-bottom: 1px dashed&quot;&gt;numero_copia&lt;/span&gt;" vertex="1">
           <mxGeometry height="35" width="110" x="630" y="420" as="geometry" />
         </mxCell>
-        <mxCell id="A_EJE_2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" value="estado_fisico" vertex="1">
+        <mxCell id="A_EJE_2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" value="tipo_estado_fisico" vertex="1">
           <mxGeometry height="35" width="100" x="640" y="510" as="geometry" />
         </mxCell>
         <mxCell id="LEJ1" edge="1" parent="1" source="E_EJEMPLAR" style="endArrow=none;html=1;strokeColor=#000000;" target="A_EJE_1">
