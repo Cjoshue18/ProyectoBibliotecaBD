@@ -55,7 +55,7 @@ Son las reglas que la base de datos siempre debe cumplir:
 1. Las fechas de devolución no pueden ser anteriores al préstamo  
 2. Un ejemplar no puede estar en dos préstamos activos a la vez.  
 3. fecha\_vencimiento \> fecha\_prestamo (apuntando a la hora de cierre de la biblioteca del día correspondiente), y fecha\_devolucion\_real es nula mientras el libro no se devuelva.  
-4. Una deuda nace apenas la fecha actual supere a la de vencimiento (con fecha\_fin\_suspension nula hasta que se devuelva el ejemplar). Su monto se calcula como días de retraso x tarifa\_diaria.  
+4. Una deuda nace apenas la fecha actual supere a la de vencimiento (con fecha\_fin\_suspension nula hasta que se devuelva el ejemplar). La tarifa\_diaria debe ser mayor a cero (valor base por defecto de S/ 5.00) y su monto se calcula como días de retraso x tarifa\_diaria.  
 5. Un lector con deuda pendiente queda suspendido hasta fecha\_fin\_suspension (la cual se cumple aunque pague antes, y se acumula si tiene múltiples deudas) y no puede pedir nuevos préstamos.  
 6. Un lector es alumno o docente, no ambos.  
 7. El monto\_pagado debe ser mayor que cero.  
