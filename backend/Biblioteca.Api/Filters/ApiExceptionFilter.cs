@@ -11,6 +11,7 @@ public class ApiExceptionFilter : IExceptionFilter
         var (status, title) = context.Exception switch
         {
             ReglaNegocioException => (StatusCodes.Status400BadRequest, "Regla de negocio"),
+            UnauthorizedException => (StatusCodes.Status401Unauthorized, "No autorizado"),
             NotFoundException => (StatusCodes.Status404NotFound, "Recurso no encontrado"),
             ConflictException => (StatusCodes.Status409Conflict, "Conflicto de datos"),
             _ => (0, "")
