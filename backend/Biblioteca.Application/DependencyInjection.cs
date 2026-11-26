@@ -11,6 +11,7 @@ public static class DependencyInjection
         services.AddScoped<LectorService>();
         services.AddScoped<AuthService>();
         services.AddScoped<PrestamoService>();
+        services.AddScoped<DeudaPagoService>();
         return services;
     }
 }
