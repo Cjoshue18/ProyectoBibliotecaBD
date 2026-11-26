@@ -10,6 +10,7 @@ public static class DependencyInjection
         services.AddScoped<CatalogoService>();
         services.AddScoped<LectorService>();
         services.AddScoped<AuthService>();
+        services.AddScoped<PrestamoService>();
         return services;
     }
 }
