@@ -1,0 +1,23 @@
+# .NET / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+TestResults/
+
+# Secrets / Config local
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# Angular / Node (Fase 3)
+node_modules/
+dist/
+.angular/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
