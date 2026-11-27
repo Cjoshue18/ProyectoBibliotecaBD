@@ -5,17 +5,6 @@
       <span class="brand-title">Biblioteca URP</span>
     </a>
 
-    <div class="search-row">
-      <input
-        type="text"
-        [(ngModel)]="terminoBusqueda"
-        (keydown.enter)="buscarEnCatalogo()"
-        placeholder="Buscar título, autor o ISBN..."
-        aria-label="Buscar en el catálogo"
-      />
-      <button type="button" (click)="buscarEnCatalogo()">Buscar</button>
-    </div>
-
     <nav aria-label="Navegación principal">
       <ul class="nav-links">
         <li>

@@ -36,34 +36,6 @@
   color: var(--c-primary);
 }
 
-.search-row {
-  display: flex;
-  border: 1px solid var(--c-primary);
-  background: var(--c-white);
-}
-
-.search-row input {
-  border: none;
-  padding: 8px 12px;
-  width: 185px;
-  outline: none;
-  color: var(--c-primary-dark);
-  background: var(--c-white);
-}
-
-.search-row button {
-  background: var(--c-secondary);
-  color: var(--c-white);
-  border: none;
-  padding: 8px 16px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.search-row button:hover {
-  background: var(--c-primary);
-}
-
 .nav-links {
   display: flex;
   align-items: center;
