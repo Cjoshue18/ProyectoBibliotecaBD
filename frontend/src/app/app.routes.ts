@@ -1,3 +1,19 @@
+import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
+import { encargadoGuard, lectorGuard } from './core/guards/role.guard';
 
-export const routes: Routes = [];
+@Component({
+  selector: 'app-ruta-en-construccion',
+  template: `<div class="app-page"><div class="container"><div class="card-flat"><p>Módulo en preparación.</p></div></div></div>`,
+})
+export class RutaEnConstruccionComponent {}
+
+export const routes: Routes = [
+  { path: '', component: RutaEnConstruccionComponent },
+  { path: 'catalogo', component: RutaEnConstruccionComponent },
+  { path: 'sobre-biblioteca', component: RutaEnConstruccionComponent },
+  { path: 'login', component: RutaEnConstruccionComponent },
+  { path: 'lector', canActivate: [lectorGuard], component: RutaEnConstruccionComponent },
+  { path: 'encargado', canActivate: [encargadoGuard], component: RutaEnConstruccionComponent },
+  { path: '**', redirectTo: '' },
+];
