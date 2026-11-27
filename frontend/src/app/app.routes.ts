@@ -16,6 +16,12 @@ export const routes: Routes = [
   },
   {
     path: 'login',
+    data: { modo: 'lector' },
+    loadComponent: () => import('./features/auth/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'admin',
+    data: { modo: 'encargado' },
     loadComponent: () => import('./features/auth/login.component').then((m) => m.LoginComponent),
   },
   {

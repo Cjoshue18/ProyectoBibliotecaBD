@@ -28,16 +28,12 @@
           <a class="nav-btn" routerLink="/sobre-biblioteca" routerLinkActive="active">Sobre la Biblioteca</a>
         </li>
         <li>
-          <a class="nav-btn" routerLink="/lector" routerLinkActive="active">Portal Lector</a>
-        </li>
-        <li>
-          <a class="nav-btn" routerLink="/encargado" routerLinkActive="active">Panel Encargado</a>
-        </li>
-        <li>
           @if (auth.session(); as s) {
             <div class="session-pill" [title]="s.nombreCompleto">
-              <span class="session-role">{{ s.rol }}</span>
-              <span class="session-name">{{ s.nombreCompleto }}</span>
+              <a class="session-link" [routerLink]="auth.esEncargado() ? '/encargado' : '/lector'">
+                <span class="session-role">{{ s.rol }}</span>
+                <span class="session-name">{{ s.nombreCompleto }}</span>
+              </a>
               <button type="button" class="btn-secondary-urp" (click)="cerrarSesion()">Salir</button>
             </div>
           } @else {

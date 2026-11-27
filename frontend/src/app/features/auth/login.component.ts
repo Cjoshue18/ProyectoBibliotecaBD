@@ -3,14 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { extraerMensajeError } from '../../core/models/biblioteca.models';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, MatTabsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -19,7 +18,7 @@ export class LoginComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
-  readonly tabIndex = signal(0);
+  readonly modo = signal<'lector' | 'encargado'>('lector');
   readonly cargando = signal(false);
   readonly errorMensaje = signal('');
 
@@ -28,15 +27,19 @@ export class LoginComponent implements OnInit {
   passwordEncargado = '';
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.tabIndex.set(params['modo'] === 'encargado' ? 1 : 0);
+    this.route.data.subscribe((data) => {
+      const m = data['modo'] === 'encargado' ? 'encargado' : 'lector';
+      this.modo.set(m);
       this.errorMensaje.set('');
-    });
-  }
 
-  onTabChange(index: number): void {
-    this.tabIndex.set(index);
-    this.errorMensaje.set('');
+      if (m === 'lector' && this.auth.esLector()) {
+        this.router.navigate(['/lector']);
+      } else if (m === 'encargado' && this.auth.esEncargado()) {
+        this.router.navigate([
+          this.auth.pendientePrestar() ? '/encargado/registrar-prestamo' : '/encargado',
+        ]);
+      }
+    });
   }
 
   rellenarDemoLector(usuario: string, clave: string): void {

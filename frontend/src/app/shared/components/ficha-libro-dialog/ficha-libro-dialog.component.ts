@@ -32,7 +32,7 @@ export class FichaLibroDialogComponent {
     if (this.auth.esEncargado()) {
       this.router.navigate(['/encargado/registrar-prestamo']);
     } else {
-      this.router.navigate(['/login'], { queryParams: { modo: 'encargado' } });
+      this.router.navigate(['/admin']);
     }
   }
 }

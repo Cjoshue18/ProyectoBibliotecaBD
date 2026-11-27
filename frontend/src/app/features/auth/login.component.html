@@ -3,12 +3,16 @@
     <div class="card-flat">
       <div class="card-header-row">
         <div>
-          <div class="kicker-caps">Acceso al Sistema</div>
-          <h2 class="section-serif login-title">Iniciar Sesión</h2>
+          <div class="kicker-caps">
+            {{ modo() === 'encargado' ? 'Administración de Biblioteca' : 'Acceso para Lectores' }}
+          </div>
+          <h2 class="section-serif login-title">
+            {{ modo() === 'encargado' ? 'Panel de Encargado' : 'Iniciar Sesión' }}
+          </h2>
         </div>
       </div>
 
-      @if (auth.pendientePrestar(); as pendiente) {
+      @if (modo() === 'encargado' && auth.pendientePrestar(); as pendiente) {
         <div class="alert-box">
           Inicia sesión como <strong>Encargado</strong> para prestar el ejemplar
           <strong>{{ pendiente.tituloLibro }}</strong> ({{ pendiente.isbn }} · Copia #{{ pendiente.numeroCopia }}).
@@ -19,59 +23,55 @@
         <div class="alert-box alert-err">{{ errorMensaje() }}</div>
       }
 
-      <mat-tab-group [selectedIndex]="tabIndex()" (selectedIndexChange)="onTabChange($event)">
-        <mat-tab label="Lector (Alumno / Docente)">
-          <div class="tab-panel-pad">
-            <p class="hint-text">
-              <strong>Alumno:</strong> código de alumno + número de documento.<br />
-              <strong>Docente:</strong> número de documento en ambos campos.
-            </p>
+      @if (modo() === 'lector') {
+        <div class="tab-panel-pad">
+          <p class="hint-text">
+            <strong>Alumno:</strong> código de alumno + número de documento.<br />
+            <strong>Docente:</strong> número de documento en ambos campos.
+          </p>
 
-            <form (ngSubmit)="ingresarLector()" class="login-form">
-              <mat-form-field appearance="outline" class="full-w">
-                <mat-label>Usuario (Código de Alumno o DNI)</mat-label>
-                <input matInput name="usuarioLector" [(ngModel)]="usuarioLector" placeholder="Ej. 202210101 o 40123456" />
-              </mat-form-field>
+          <form (ngSubmit)="ingresarLector()" class="login-form">
+            <mat-form-field appearance="outline" class="full-w">
+              <mat-label>Usuario (Código de Alumno o DNI)</mat-label>
+              <input matInput name="usuarioLector" [(ngModel)]="usuarioLector" placeholder="Ej. 202210101 o 40123456" />
+            </mat-form-field>
 
-              <mat-form-field appearance="outline" class="full-w">
-                <mat-label>Contraseña (N° de Documento)</mat-label>
-                <input matInput type="password" name="claveLector" [(ngModel)]="claveLector" placeholder="Ej. 71234561" />
-              </mat-form-field>
+            <mat-form-field appearance="outline" class="full-w">
+              <mat-label>Contraseña (N° de Documento)</mat-label>
+              <input matInput type="password" name="claveLector" [(ngModel)]="claveLector" placeholder="Ej. 71234561" />
+            </mat-form-field>
 
-              <div class="demo-row">
-                <button type="button" class="btn-secondary-urp" (click)="rellenarDemoLector('202210101', '71234561')">
-                  Demo Alumno Activo
-                </button>
-                <button type="button" class="btn-secondary-urp" (click)="rellenarDemoLector('202110303', '71234563')">
-                  Demo Alumno Suspendido
-                </button>
-                <button type="button" class="btn-secondary-urp" (click)="rellenarDemoLector('40123456', '40123456')">
-                  Demo Docente
-                </button>
-              </div>
-
-              <button type="submit" class="btn-primary-urp full-w" [disabled]="cargando()">
-                {{ cargando() ? 'Validando...' : 'Ingresar al Portal Lector' }}
+            <div class="demo-row">
+              <button type="button" class="btn-secondary-urp" (click)="rellenarDemoLector('202210101', '71234561')">
+                Demo Alumno Activo
               </button>
-            </form>
-          </div>
-        </mat-tab>
-
-        <mat-tab label="Encargado">
-          <div class="tab-panel-pad">
-            <form (ngSubmit)="ingresarEncargado()" class="login-form">
-              <mat-form-field appearance="outline" class="full-w">
-                <mat-label>Contraseña de Encargado</mat-label>
-                <input matInput type="password" name="passwordEncargado" [(ngModel)]="passwordEncargado" />
-              </mat-form-field>
-
-              <button type="submit" class="btn-primary-urp full-w" [disabled]="cargando()">
-                {{ cargando() ? 'Validando...' : 'Ingresar al Panel Encargado' }}
+              <button type="button" class="btn-secondary-urp" (click)="rellenarDemoLector('202110303', '71234563')">
+                Demo Alumno Suspendido
               </button>
-            </form>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
+              <button type="button" class="btn-secondary-urp" (click)="rellenarDemoLector('40123456', '40123456')">
+                Demo Docente
+              </button>
+            </div>
+
+            <button type="submit" class="btn-primary-urp full-w" [disabled]="cargando()">
+              {{ cargando() ? 'Validando...' : 'Ingresar a Mi Cuenta' }}
+            </button>
+          </form>
+        </div>
+      } @else {
+        <div class="tab-panel-pad">
+          <form (ngSubmit)="ingresarEncargado()" class="login-form">
+            <mat-form-field appearance="outline" class="full-w">
+              <mat-label>Contraseña de Encargado</mat-label>
+              <input matInput type="password" name="passwordEncargado" [(ngModel)]="passwordEncargado" />
+            </mat-form-field>
+
+            <button type="submit" class="btn-primary-urp full-w" [disabled]="cargando()">
+              {{ cargando() ? 'Validando...' : 'Ingresar al Panel de Administración' }}
+            </button>
+          </form>
+        </div>
+      }
     </div>
   </div>
 </div>
