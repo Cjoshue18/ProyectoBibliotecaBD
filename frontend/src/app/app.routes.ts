@@ -25,7 +25,23 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./features/auth/login.component').then((m) => m.LoginComponent),
   },
-  { path: 'lector', canActivate: [lectorGuard], component: RutaEnConstruccionComponent },
+  {
+    path: 'lector',
+    canActivate: [lectorGuard],
+    loadComponent: () =>
+      import('./features/lector/lector-layout.component').then((m) => m.LectorLayoutComponent),
+    children: [
+      { path: '', redirectTo: 'resumen', pathMatch: 'full' },
+      {
+        path: 'resumen',
+        loadComponent: () =>
+          import('./features/lector/resumen-lector.component').then((m) => m.ResumenLectorComponent),
+      },
+      { path: 'prestamos', component: RutaEnConstruccionComponent },
+      { path: 'deudas', component: RutaEnConstruccionComponent },
+      { path: 'comprobantes', component: RutaEnConstruccionComponent },
+    ],
+  },
   { path: 'encargado', canActivate: [encargadoGuard], component: RutaEnConstruccionComponent },
   { path: '**', redirectTo: '' },
 ];

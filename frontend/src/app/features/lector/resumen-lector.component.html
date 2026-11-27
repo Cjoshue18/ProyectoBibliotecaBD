@@ -1,0 +1,155 @@
+@if (errorMensaje()) {
+  <div class="alert-box alert-err">{{ errorMensaje() }}</div>
+}
+
+<div class="card-flat">
+  <div class="card-header-row">
+    <div>
+      <div class="kicker-caps">Mi Cuenta</div>
+      <h2 class="section-serif heading-flush">
+        {{ perfil()?.nombreCompleto || auth.session()?.nombreCompleto || 'Resumen del Lector' }}
+      </h2>
+    </div>
+    @if (perfil(); as p) {
+      <span class="badge" [class.badge-ok]="p.estadoLector === 'Activo'" [class.badge-warn]="p.estadoLector !== 'Activo'">
+        {{ p.estadoLector }}
+      </span>
+    }
+  </div>
+
+  @if (cargando()) {
+    <div class="alert-box">Cargando información de cuenta...</div>
+  } @else if (perfil(); as p) {
+    <div class="kpi-grid">
+      <div class="kpi-box">
+        <div class="kpi-lbl">Tipo de Lector</div>
+        <div class="kpi-val">{{ p.tipoLector }}</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-lbl">Identificación</div>
+        <div class="kpi-val">{{ p.codigoAlumno || p.numeroDoc }}</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-lbl">Facultad</div>
+        <div class="kpi-val kpi-small">{{ p.nombreFacultad }}</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-lbl">Cupo Activo</div>
+        <div class="kpi-val">{{ activosCount() }} / {{ cupoMaximo() }}</div>
+      </div>
+    </div>
+  }
+</div>
+
+<div class="card-flat">
+  <div class="card-header-row">
+    <h3 class="section-serif sub-heading-flush">Últimos Préstamos (máx. 5)</h3>
+    <a class="btn-link-inline" routerLink="../prestamos">Ver más →</a>
+  </div>
+  @if (ultimosPrestamos().length === 0) {
+    <p>Sin préstamos registrados.</p>
+  } @else {
+    <div class="table-wrap">
+      <table mat-table [dataSource]="ultimosPrestamos()" class="full-table">
+        <ng-container matColumnDef="idPrestamo">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let p">#{{ p.idPrestamo }}</td>
+        </ng-container>
+        <ng-container matColumnDef="tituloLibro">
+          <th mat-header-cell *matHeaderCellDef>Libro</th>
+          <td mat-cell *matCellDef="let p">{{ p.tituloLibro }}</td>
+        </ng-container>
+        <ng-container matColumnDef="tipoPrestamo">
+          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <td mat-cell *matCellDef="let p">{{ p.tipoPrestamo }}</td>
+        </ng-container>
+        <ng-container matColumnDef="fechaVencimiento">
+          <th mat-header-cell *matHeaderCellDef>Vencimiento</th>
+          <td mat-cell *matCellDef="let p">{{ p.fechaVencimiento | date: 'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let p">
+            <span class="badge" [class.badge-warn]="p.estadoDerivado === 'Vencido'" [class.badge-info]="p.estadoDerivado === 'Devuelto'" [class.badge-ok]="p.estadoDerivado === 'Activo'">
+              {{ p.estadoDerivado }}
+            </span>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="colsPrestamos"></tr>
+        <tr mat-row *matRowDef="let row; columns: colsPrestamos"></tr>
+      </table>
+    </div>
+  }
+</div>
+
+<div class="card-flat">
+  <div class="card-header-row">
+    <h3 class="section-serif sub-heading-flush">Últimas Deudas (máx. 5)</h3>
+    <a class="btn-link-inline" routerLink="../deudas">Ver más →</a>
+  </div>
+  @if (ultimasDeudas().length === 0) {
+    <p>No registras deudas.</p>
+  } @else {
+    <div class="table-wrap">
+      <table mat-table [dataSource]="ultimasDeudas()" class="full-table">
+        <ng-container matColumnDef="idDeuda">
+          <th mat-header-cell *matHeaderCellDef>Deuda</th>
+          <td mat-cell *matCellDef="let d">#{{ d.idDeuda }}</td>
+        </ng-container>
+        <ng-container matColumnDef="tarifaDiaria">
+          <th mat-header-cell *matHeaderCellDef>Tarifa Diaria</th>
+          <td mat-cell *matCellDef="let d">{{ d.tarifaDiaria | currency: 'PEN' : 'S/ ' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="fechaFinSuspension">
+          <th mat-header-cell *matHeaderCellDef>Fin Suspensión</th>
+          <td mat-cell *matCellDef="let d">
+            {{ d.fechaFinSuspension ? (d.fechaFinSuspension | date: 'dd/MM/yyyy') : 'Al devolver ejemplar' }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="estadoDeuda">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let d">
+            <span class="badge" [class.badge-warn]="d.estadoDeuda === 'Pendiente'" [class.badge-ok]="d.estadoDeuda !== 'Pendiente'">
+              {{ d.estadoDeuda }}
+            </span>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="colsDeudas"></tr>
+        <tr mat-row *matRowDef="let row; columns: colsDeudas"></tr>
+      </table>
+    </div>
+  }
+</div>
+
+<div class="card-flat">
+  <div class="card-header-row">
+    <h3 class="section-serif sub-heading-flush">Últimos Comprobantes (máx. 5)</h3>
+    <a class="btn-link-inline" routerLink="../comprobantes">Ver más →</a>
+  </div>
+  @if (ultimosPagos().length === 0) {
+    <p>No registras comprobantes de pago.</p>
+  } @else {
+    <div class="table-wrap">
+      <table mat-table [dataSource]="ultimosPagos()" class="full-table">
+        <ng-container matColumnDef="numeroRecibo">
+          <th mat-header-cell *matHeaderCellDef>Recibo</th>
+          <td mat-cell *matCellDef="let pg">{{ pg.numeroRecibo }}</td>
+        </ng-container>
+        <ng-container matColumnDef="fechaPago">
+          <th mat-header-cell *matHeaderCellDef>Fecha Pago</th>
+          <td mat-cell *matCellDef="let pg">{{ pg.fechaPago | date: 'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="montoPagado">
+          <th mat-header-cell *matHeaderCellDef>Monto Pagado</th>
+          <td mat-cell *matCellDef="let pg">{{ pg.montoPagado | currency: 'PEN' : 'S/ ' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="idDeuda">
+          <th mat-header-cell *matHeaderCellDef>Deuda</th>
+          <td mat-cell *matCellDef="let pg">#{{ pg.idDeuda }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="colsPagos"></tr>
+        <tr mat-row *matRowDef="let row; columns: colsPagos"></tr>
+      </table>
+    </div>
+  }
+</div>

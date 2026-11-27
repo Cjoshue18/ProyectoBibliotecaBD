@@ -1,0 +1,22 @@
+.heading-flush {
+  margin-bottom: 0;
+}
+
+.sub-heading-flush {
+  font-size: 19px;
+  margin-bottom: 0;
+}
+
+.kpi-small {
+  font-size: 15px;
+}
+
+.btn-link-inline {
+  background: transparent;
+  border: none;
+  color: var(--c-secondary);
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 13px;
+}

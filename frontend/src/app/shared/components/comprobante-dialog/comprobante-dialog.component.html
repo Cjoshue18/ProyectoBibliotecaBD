@@ -1,0 +1,44 @@
+<div class="comp-shell">
+  <div class="comp-head">
+    <div>
+      <div class="kicker-caps">Comprobante de Pago</div>
+      <h2 class="comp-title">Recibo {{ data.pago.numeroRecibo }}</h2>
+    </div>
+    <button type="button" class="btn-secondary-urp" mat-dialog-close>Cerrar</button>
+  </div>
+
+  <div class="kpi-grid comp-kpis">
+    <div class="kpi-box">
+      <div class="kpi-lbl">N° Recibo</div>
+      <div class="kpi-val">{{ data.pago.numeroRecibo }}</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-lbl">Monto Pagado</div>
+      <div class="kpi-val">{{ data.pago.montoPagado | currency: 'PEN' : 'S/ ' }}</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-lbl">Fecha de Pago</div>
+      <div class="kpi-val">{{ data.pago.fechaPago | date: 'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-lbl">Deuda Asociada</div>
+      <div class="kpi-val">#{{ data.pago.idDeuda }}</div>
+    </div>
+  </div>
+
+  <div class="comp-detail">
+    @if (data.nombreLector) {
+      <p><strong>Lector:</strong> {{ data.nombreLector }}</p>
+    }
+    @if (data.tituloLibro) {
+      <p><strong>Libro:</strong> {{ data.tituloLibro }}</p>
+    }
+    @if (data.diasRetraso !== undefined && data.tarifaDiaria !== undefined) {
+      <p>
+        <strong>Detalle de multa:</strong> {{ data.diasRetraso }} día(s) ×
+        {{ data.tarifaDiaria | currency: 'PEN' : 'S/ ' }}/día
+      </p>
+    }
+    <p class="comp-inst">Biblioteca Central URP — Pago íntegro registrado en caja universitaria.</p>
+  </div>
+</div>
