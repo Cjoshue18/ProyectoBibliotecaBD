@@ -1,0 +1,51 @@
+<div class="picker-shell">
+  <div class="picker-head">
+    <div>
+      <div class="kicker-caps">Matchcode de Autores</div>
+      <h2 class="picker-title">Seleccionar Autores</h2>
+    </div>
+    <button type="button" class="btn-secondary-urp" (click)="confirmar()">Listo ({{ seleccionados().size }})</button>
+  </div>
+
+  <div class="picker-toolbar">
+    <input
+      class="urp-input"
+      type="text"
+      [ngModel]="busqueda()"
+      (ngModelChange)="onBusquedaChange($event)"
+      placeholder="Filtrar autor por nombre..."
+    />
+    <button type="button" class="btn-link-inline" (click)="irACrearAutor()">+ Crear nuevo autor</button>
+  </div>
+
+  <div class="table-wrap">
+    <table mat-table [dataSource]="paginados()" class="full-table">
+      <ng-container matColumnDef="nombreAutor">
+        <th mat-header-cell *matHeaderCellDef>Autor</th>
+        <td mat-cell *matCellDef="let a">{{ a.nombreAutor }}</td>
+      </ng-container>
+      <ng-container matColumnDef="accion">
+        <th mat-header-cell *matHeaderCellDef>Selección</th>
+        <td mat-cell *matCellDef="let a">
+          <button
+            type="button"
+            class="btn-secondary-urp"
+            (click)="toggleAutor(a.idAutor)"
+          >
+            {{ seleccionados().has(a.idAutor) ? '✓ Quitar' : '+ Elegir' }}
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    [length]="filtrados().length"
+    [pageIndex]="pageIndex()"
+    [pageSize]="6"
+    [hidePageSize]="true"
+    (page)="onPageChange($event)"
+  />
+</div>

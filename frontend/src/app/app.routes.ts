@@ -1,12 +1,5 @@
-import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
 import { encargadoGuard, lectorGuard } from './core/guards/role.guard';
-
-@Component({
-  selector: 'app-ruta-en-construccion',
-  template: `<div class="app-page"><div class="container"><div class="card-flat"><p>Módulo en preparación.</p></div></div></div>`,
-})
-export class RutaEnConstruccionComponent {}
 
 export const routes: Routes = [
   {
@@ -91,9 +84,27 @@ export const routes: Routes = [
             (m) => m.ListaPrestamosComponent,
           ),
       },
-      { path: 'lectores', component: RutaEnConstruccionComponent },
-      { path: 'catalogo', component: RutaEnConstruccionComponent },
-      { path: 'autores-editoriales', component: RutaEnConstruccionComponent },
+      {
+        path: 'lectores',
+        loadComponent: () =>
+          import('./features/encargado/lista-lectores.component').then(
+            (m) => m.ListaLectoresComponent,
+          ),
+      },
+      {
+        path: 'catalogo',
+        loadComponent: () =>
+          import('./features/encargado/gestion-catalogo.component').then(
+            (m) => m.GestionCatalogoComponent,
+          ),
+      },
+      {
+        path: 'autores-editoriales',
+        loadComponent: () =>
+          import('./features/encargado/gestion-autores-editoriales.component').then(
+            (m) => m.GestionAutoresEditorialesComponent,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

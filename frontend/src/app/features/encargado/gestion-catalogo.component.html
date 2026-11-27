@@ -1,0 +1,168 @@
+@if (feedbackExito()) {
+  <div class="alert-box alert-ok">{{ feedbackExito() }}</div>
+}
+@if (feedbackError()) {
+  <div class="alert-box alert-err">{{ feedbackError() }}</div>
+}
+
+<div class="card-flat">
+  <div class="card-header-row">
+    <h2 class="section-serif heading-flush">Catálogo y Estados Físicos</h2>
+    <div class="inline-actions">
+      <button type="button" class="btn-primary-urp" (click)="abrirCrearLibro()">+ Crear Libro</button>
+      <button type="button" class="btn-secondary-urp" (click)="mostrarExtra.set(mostrarExtra() === 'edicion' ? 'none' : 'edicion')">
+        + Edición
+      </button>
+      <button type="button" class="btn-secondary-urp" (click)="mostrarExtra.set(mostrarExtra() === 'ejemplar' ? 'none' : 'ejemplar')">
+        + Ejemplar
+      </button>
+    </div>
+  </div>
+
+  @if (mostrarExtra() === 'edicion') {
+    <div style="margin-bottom: 18px; border-bottom: 2px solid var(--c-ice); padding-bottom: 14px;">
+      <div class="kicker-caps" style="margin-bottom: 10px;">Registrar Nueva Edición</div>
+      <div class="form-grid">
+        <div class="urp-field">
+          <label for="edLibro">Libro</label>
+          <select id="edLibro" class="urp-input" [(ngModel)]="edIdLibro">
+            @for (l of libros(); track l.idLibro) {
+              <option [value]="l.idLibro">{{ l.titulo }}</option>
+            }
+          </select>
+        </div>
+        <div class="urp-field">
+          <label for="edIsbn">ISBN (13 dígitos)</label>
+          <input id="edIsbn" class="urp-input" type="text" [(ngModel)]="edIsbn" placeholder="978..." />
+        </div>
+        <div class="urp-field">
+          <label for="edNum">N° Edición</label>
+          <input id="edNum" class="urp-input" type="number" min="1" [(ngModel)]="edNumero" />
+        </div>
+        <div class="urp-field">
+          <label for="edAnio">Año</label>
+          <input id="edAnio" class="urp-input" type="number" min="1900" [(ngModel)]="edAnio" />
+        </div>
+        <div class="urp-field">
+          <label for="edEd">Editorial</label>
+          <select id="edEd" class="urp-input" [(ngModel)]="edIdEditorial">
+            @for (ed of editoriales(); track ed.idEditorial) {
+              <option [value]="ed.idEditorial">{{ ed.nombreEditorial }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <button type="button" class="btn-primary-urp" [disabled]="procesando()" (click)="registrarEdicion()">Guardar Edición</button>
+    </div>
+  }
+
+  @if (mostrarExtra() === 'ejemplar') {
+    <div style="margin-bottom: 18px; border-bottom: 2px solid var(--c-ice); padding-bottom: 14px;">
+      <div class="kicker-caps" style="margin-bottom: 10px;">Registrar Nuevo Ejemplar Físico</div>
+      <div class="form-grid">
+        <div class="urp-field">
+          <label for="ejIsbn">Edición (ISBN)</label>
+          <select id="ejIsbn" class="urp-input" [(ngModel)]="ejIsbn">
+            @for (ed of edicionesPlanas(); track ed.isbn) {
+              <option [value]="ed.isbn">{{ ed.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="urp-field">
+          <label for="ejCopia">N° Copia</label>
+          <input id="ejCopia" class="urp-input" type="number" min="1" [(ngModel)]="ejNumeroCopia" />
+        </div>
+        <div class="urp-field">
+          <label for="ejFac">Facultad Asignada</label>
+          <select id="ejFac" class="urp-input" [(ngModel)]="ejIdFacultad">
+            @for (f of facultades(); track f.idFacultad) {
+              <option [value]="f.idFacultad">{{ f.nombreFacultad }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <button type="button" class="btn-primary-urp" [disabled]="procesando()" (click)="registrarEjemplar()">Guardar Ejemplar</button>
+    </div>
+  }
+
+  @if (editandoLibro(); as edit) {
+    <div class="alert-box" style="margin-bottom: 16px;">
+      <div class="kicker-caps" style="margin-bottom: 6px;">Editar Título de Libro #{{ edit.idLibro }}</div>
+      <div class="inline-actions">
+        <input class="urp-input" style="flex: 1; min-width: 240px;" type="text" [(ngModel)]="edit.titulo" />
+        <button type="button" class="btn-primary-urp" [disabled]="procesando()" (click)="guardarTitulo()">Guardar</button>
+        <button type="button" class="btn-secondary-urp" (click)="editandoLibro.set(null)">Cancelar</button>
+      </div>
+    </div>
+  }
+
+  <div class="urp-field">
+    <label for="encSearchCatalogo">Buscar libro o ejemplar (por título, autor o ISBN)</label>
+    <input
+      id="encSearchCatalogo"
+      class="urp-input"
+      type="text"
+      [ngModel]="busqueda()"
+      (ngModelChange)="onBusquedaChange($event)"
+      placeholder="Ej. Clean Code, Elmasri o 978..."
+    />
+  </div>
+
+  @if (cargando()) {
+    <div class="alert-box">Cargando catálogo...</div>
+  } @else {
+    <div class="table-wrap">
+      <table mat-table [dataSource]="paginadas()" class="full-table">
+        <ng-container matColumnDef="libro">
+          <th mat-header-cell *matHeaderCellDef>Libro / Autores</th>
+          <td mat-cell *matCellDef="let ej">
+            <strong>{{ ej.titulo }}</strong><br />
+            <small>{{ ej.autores }}</small>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="isbnCopia">
+          <th mat-header-cell *matHeaderCellDef>ISBN / Copia</th>
+          <td mat-cell *matCellDef="let ej">{{ ej.isbn }} (#{{ ej.numeroCopia }})</td>
+        </ng-container>
+        <ng-container matColumnDef="nombreFacultad">
+          <th mat-header-cell *matHeaderCellDef>Facultad</th>
+          <td mat-cell *matCellDef="let ej">{{ ej.nombreFacultad }}</td>
+        </ng-container>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado Actual</th>
+          <td mat-cell *matCellDef="let ej">
+            <span class="badge" [class.badge-ok]="ej.tipoEstadoFisico === 'Bueno' || ej.tipoEstadoFisico === 'Regular'" [class.badge-warn]="ej.tipoEstadoFisico === 'Dañado' || ej.tipoEstadoFisico === 'En Reparacion'">
+              {{ ej.tipoEstadoFisico }}
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones y Transiciones</th>
+          <td mat-cell *matCellDef="let ej">
+            <div class="inline-actions">
+              <button type="button" class="btn-secondary-urp" (click)="iniciarEdicionTitulo(ej)">
+                Editar título
+              </button>
+              @for (dest of transicionesDisponibles(ej.tipoEstadoFisico); track dest) {
+                <button type="button" class="btn-secondary-urp" [disabled]="procesando()" (click)="cambiarEstado(ej, dest)">
+                  → {{ dest }}
+                </button>
+              }
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+      </table>
+    </div>
+  }
+
+  <mat-paginator
+    [length]="filas().length"
+    [pageIndex]="pageIndex()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[6, 12, 20]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  />
+</div>

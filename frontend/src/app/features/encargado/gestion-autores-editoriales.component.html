@@ -1,0 +1,134 @@
+@if (feedbackExito()) {
+  <div class="alert-box alert-ok">{{ feedbackExito() }}</div>
+}
+@if (feedbackError()) {
+  <div class="alert-box alert-err">{{ feedbackError() }}</div>
+}
+
+<div class="card-flat">
+  <div class="card-header-row">
+    <h2 class="section-serif heading-flush">Gestión de Autores</h2>
+  </div>
+
+  <div class="form-grid">
+    <div class="urp-field">
+      <label for="newAutorNombre">Nuevo Autor (Nombre completo)</label>
+      <input
+        id="newAutorNombre"
+        class="urp-input"
+        type="text"
+        [(ngModel)]="nuevoAutorNombre"
+        placeholder="Ej. Andrew S. Tanenbaum"
+      />
+    </div>
+  </div>
+  <button type="button" class="btn-primary-urp" style="margin-bottom: 18px;" [disabled]="procesando()" (click)="registrarAutor()">
+    Registrar Autor
+  </button>
+
+  <div class="urp-field">
+    <label for="encSearchAutores">Buscar autor</label>
+    <input
+      id="encSearchAutores"
+      class="urp-input"
+      type="text"
+      [ngModel]="filtroAutores()"
+      (ngModelChange)="onFiltroAutorChange($event)"
+      placeholder="Filtrar autores..."
+    />
+  </div>
+
+  <div class="table-wrap">
+    <table mat-table [dataSource]="autoresPaginados()" class="full-table">
+      <ng-container matColumnDef="idAutor">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let a">#{{ a.idAutor }}</td>
+      </ng-container>
+      <ng-container matColumnDef="nombreAutor">
+        <th mat-header-cell *matHeaderCellDef>Autor</th>
+        <td mat-cell *matCellDef="let a">{{ a.nombreAutor }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="colsAutores"></tr>
+      <tr mat-row *matRowDef="let row; columns: colsAutores"></tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    [length]="autoresFiltrados().length"
+    [pageIndex]="autorPageIndex()"
+    [pageSize]="6"
+    [hidePageSize]="true"
+    (page)="onAutorPage($event)"
+  />
+</div>
+
+<div class="card-flat">
+  <div class="card-header-row">
+    <h2 class="section-serif heading-flush">Gestión de Editoriales</h2>
+  </div>
+
+  <div class="form-grid">
+    <div class="urp-field">
+      <label for="newEdNombre">Nombre Editorial</label>
+      <input
+        id="newEdNombre"
+        class="urp-input"
+        type="text"
+        [(ngModel)]="nuevaEdNombre"
+        placeholder="Ej. Addison-Wesley"
+      />
+    </div>
+    <div class="urp-field">
+      <label for="newEdPais">País de Origen</label>
+      <input
+        id="newEdPais"
+        class="urp-input"
+        type="text"
+        [(ngModel)]="nuevaEdPais"
+        placeholder="Ej. Estados Unidos"
+      />
+    </div>
+  </div>
+  <button type="button" class="btn-primary-urp" style="margin-bottom: 18px;" [disabled]="procesando()" (click)="registrarEditorial()">
+    Registrar Editorial
+  </button>
+
+  <div class="urp-field">
+    <label for="encSearchEditoriales">Buscar editorial</label>
+    <input
+      id="encSearchEditoriales"
+      class="urp-input"
+      type="text"
+      [ngModel]="filtroEditoriales()"
+      (ngModelChange)="onFiltroEditorialChange($event)"
+      placeholder="Filtrar editoriales..."
+    />
+  </div>
+
+  <div class="table-wrap">
+    <table mat-table [dataSource]="editorialesPaginadas()" class="full-table">
+      <ng-container matColumnDef="idEditorial">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let ed">#{{ ed.idEditorial }}</td>
+      </ng-container>
+      <ng-container matColumnDef="nombreEditorial">
+        <th mat-header-cell *matHeaderCellDef>Editorial</th>
+        <td mat-cell *matCellDef="let ed">{{ ed.nombreEditorial }}</td>
+      </ng-container>
+      <ng-container matColumnDef="paisOrigen">
+        <th mat-header-cell *matHeaderCellDef>País</th>
+        <td mat-cell *matCellDef="let ed">{{ ed.paisOrigen }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="colsEditoriales"></tr>
+      <tr mat-row *matRowDef="let row; columns: colsEditoriales"></tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    [length]="editorialesFiltradas().length"
+    [pageIndex]="edPageIndex()"
+    [pageSize]="6"
+    [hidePageSize]="true"
+    (page)="onEdPage($event)"
+  />
+</div>

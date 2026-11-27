@@ -1,0 +1,47 @@
+<div class="crear-libro-shell">
+  <div class="crear-head">
+    <div>
+      <div class="kicker-caps">Nuevo Registro</div>
+      <h2 class="crear-title">Crear Libro</h2>
+    </div>
+    <button type="button" class="btn-secondary-urp" mat-dialog-close>Cerrar</button>
+  </div>
+
+  @if (errorMensaje()) {
+    <div class="alert-box alert-err">{{ errorMensaje() }}</div>
+  }
+
+  <div class="urp-field">
+    <label for="newBookTitle">Título del Libro</label>
+    <input
+      id="newBookTitle"
+      class="urp-input"
+      type="text"
+      [(ngModel)]="titulo"
+      placeholder="Ej. Arquitectura de Computadoras"
+    />
+  </div>
+
+  <div class="urp-field">
+    <label>Autores (Matchcode SAP)</label>
+    <div class="matchcode-row">
+      <div class="matchcode-display">
+        @for (a of autoresSeleccionados(); track a.idAutor) {
+          <span class="badge badge-info">{{ a.nombreAutor }}</span>
+        } @empty {
+          <span>Ningún autor seleccionado</span>
+        }
+      </div>
+      <button type="button" class="matchcode-btn" (click)="abrirMatchcodeAutores()">
+        <mat-icon>search</mat-icon>
+        <span>Elegir</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="crear-footer">
+    <button type="button" class="btn-primary-urp" [disabled]="guardando()" (click)="guardar()">
+      {{ guardando() ? 'Guardando...' : 'Registrar Libro' }}
+    </button>
+  </div>
+</div>

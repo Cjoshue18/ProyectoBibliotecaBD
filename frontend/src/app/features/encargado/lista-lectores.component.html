@@ -1,0 +1,196 @@
+@if (feedbackExito()) {
+  <div class="alert-box alert-ok">{{ feedbackExito() }}</div>
+}
+@if (feedbackError()) {
+  <div class="alert-box alert-err">{{ feedbackError() }}</div>
+}
+
+<div class="card-flat">
+  <div class="card-header-row">
+    <h2 class="section-serif heading-flush">Lista Completa de Lectores</h2>
+    <button type="button" class="btn-primary-urp" (click)="mostrarRegistro.set(!mostrarRegistro())">
+      {{ mostrarRegistro() ? 'Cerrar registro' : '+ Registrar Lector' }}
+    </button>
+  </div>
+
+  @if (mostrarRegistro()) {
+    <div style="margin-bottom: 20px; border-bottom: 2px solid var(--c-ice); padding-bottom: 16px;">
+      <mat-tab-group>
+        <mat-tab label="Nuevo Alumno">
+          <div class="form-grid" style="margin-top: 14px;">
+            <div class="urp-field">
+              <label for="aluTipoDoc">Tipo Doc.</label>
+              <select id="aluTipoDoc" class="urp-input" [(ngModel)]="aluTipoDoc">
+                <option value="DNI">DNI</option>
+                <option value="CE">CE</option>
+                <option value="Pasaporte">Pasaporte</option>
+              </select>
+            </div>
+            <div class="urp-field">
+              <label for="aluNumDoc">N° Documento</label>
+              <input id="aluNumDoc" class="urp-input" type="text" [(ngModel)]="aluNumeroDoc" />
+            </div>
+            <div class="urp-field">
+              <label for="aluCod">Código Alumno (9 dígitos)</label>
+              <input id="aluCod" class="urp-input" type="text" [(ngModel)]="aluCodigo" placeholder="Ej. 202410101" />
+            </div>
+            <div class="urp-field">
+              <label for="aluNom">Nombres</label>
+              <input id="aluNom" class="urp-input" type="text" [(ngModel)]="aluNombres" />
+            </div>
+            <div class="urp-field">
+              <label for="aluPat">Apellido Paterno</label>
+              <input id="aluPat" class="urp-input" type="text" [(ngModel)]="aluApellidoPaterno" />
+            </div>
+            <div class="urp-field">
+              <label for="aluMat">Apellido Materno</label>
+              <input id="aluMat" class="urp-input" type="text" [(ngModel)]="aluApellidoMaterno" />
+            </div>
+            <div class="urp-field">
+              <label for="aluCor">Correo Institucional</label>
+              <input id="aluCor" class="urp-input" type="email" [(ngModel)]="aluCorreo" placeholder="nombre@urp.edu.pe" />
+            </div>
+            <div class="urp-field">
+              <label for="aluFac">Facultad</label>
+              <select id="aluFac" class="urp-input" [(ngModel)]="aluIdFacultad">
+                @for (f of facultades(); track f.idFacultad) {
+                  <option [value]="f.idFacultad">{{ f.nombreFacultad }}</option>
+                }
+              </select>
+            </div>
+            <div class="urp-field">
+              <label for="aluCic">Ciclo (1-14)</label>
+              <input id="aluCic" class="urp-input" type="number" min="1" max="14" [(ngModel)]="aluCiclo" />
+            </div>
+          </div>
+          <button type="button" class="btn-primary-urp" [disabled]="procesando()" (click)="registrarAlumno()">
+            Guardar Alumno
+          </button>
+        </mat-tab>
+
+        <mat-tab label="Nuevo Docente">
+          <div class="form-grid" style="margin-top: 14px;">
+            <div class="urp-field">
+              <label for="docTipoDoc">Tipo Doc.</label>
+              <select id="docTipoDoc" class="urp-input" [(ngModel)]="docTipoDoc">
+                <option value="DNI">DNI</option>
+                <option value="CE">CE</option>
+                <option value="Pasaporte">Pasaporte</option>
+              </select>
+            </div>
+            <div class="urp-field">
+              <label for="docNumDoc">N° Documento</label>
+              <input id="docNumDoc" class="urp-input" type="text" [(ngModel)]="docNumeroDoc" />
+            </div>
+            <div class="urp-field">
+              <label for="docNom">Nombres</label>
+              <input id="docNom" class="urp-input" type="text" [(ngModel)]="docNombres" />
+            </div>
+            <div class="urp-field">
+              <label for="docPat">Apellido Paterno</label>
+              <input id="docPat" class="urp-input" type="text" [(ngModel)]="docApellidoPaterno" />
+            </div>
+            <div class="urp-field">
+              <label for="docMat">Apellido Materno</label>
+              <input id="docMat" class="urp-input" type="text" [(ngModel)]="docApellidoMaterno" />
+            </div>
+            <div class="urp-field">
+              <label for="docCor">Correo Institucional</label>
+              <input id="docCor" class="urp-input" type="email" [(ngModel)]="docCorreo" placeholder="nombre@urp.edu.pe" />
+            </div>
+            <div class="urp-field">
+              <label for="docFac">Facultad</label>
+              <select id="docFac" class="urp-input" [(ngModel)]="docIdFacultad">
+                @for (f of facultades(); track f.idFacultad) {
+                  <option [value]="f.idFacultad">{{ f.nombreFacultad }}</option>
+                }
+              </select>
+            </div>
+            <div class="urp-field">
+              <label for="docCat">Categoría Docente</label>
+              <select id="docCat" class="urp-input" [(ngModel)]="docCategoria">
+                <option value="Auxiliar">Auxiliar</option>
+                <option value="Asociado">Asociado</option>
+                <option value="Principal">Principal</option>
+                <option value="Contratado">Contratado</option>
+              </select>
+            </div>
+          </div>
+          <button type="button" class="btn-primary-urp" [disabled]="procesando()" (click)="registrarDocente()">
+            Guardar Docente
+          </button>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  }
+
+  <div class="urp-field">
+    <label for="encSearchLectores">Buscar lector por nombre, DNI o código</label>
+    <input
+      id="encSearchLectores"
+      class="urp-input"
+      type="text"
+      [ngModel]="busqueda()"
+      (ngModelChange)="onBusquedaChange($event)"
+      placeholder="Filtrar..."
+    />
+  </div>
+
+  @if (cargando()) {
+    <div class="alert-box">Cargando lectores...</div>
+  } @else {
+    <div class="table-wrap">
+      <table mat-table [dataSource]="paginados()" class="full-table">
+        <ng-container matColumnDef="idLector">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let l">#{{ l.idLector }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nombreCompleto">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let l">{{ l.nombreCompleto }}</td>
+        </ng-container>
+        <ng-container matColumnDef="docCodigo">
+          <th mat-header-cell *matHeaderCellDef>Documento / Código</th>
+          <td mat-cell *matCellDef="let l">
+            {{ l.tipoDoc }} {{ l.numeroDoc }}{{ l.codigoAlumno ? ' / ' + l.codigoAlumno : '' }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="tipoLector">
+          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <td mat-cell *matCellDef="let l">{{ l.tipoLector }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nombreFacultad">
+          <th mat-header-cell *matHeaderCellDef>Facultad</th>
+          <td mat-cell *matCellDef="let l">{{ l.nombreFacultad }}</td>
+        </ng-container>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let l">
+            <span class="badge" [class.badge-ok]="l.estadoLector === 'Activo'" [class.badge-warn]="l.estadoLector !== 'Activo'">
+              {{ l.estadoLector }}
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="accion">
+          <th mat-header-cell *matHeaderCellDef>Acción</th>
+          <td mat-cell *matCellDef="let l">
+            <button type="button" class="btn-secondary-urp" [disabled]="procesando()" (click)="alternarEstado(l)">
+              {{ l.estadoLector === 'Activo' ? 'Desactivar' : 'Activar' }}
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+      </table>
+    </div>
+  }
+
+  <mat-paginator
+    [length]="filtrados().length"
+    [pageIndex]="pageIndex()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[6, 12, 20]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  />
+</div>
