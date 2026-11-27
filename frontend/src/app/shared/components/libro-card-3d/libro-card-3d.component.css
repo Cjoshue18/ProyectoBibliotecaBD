@@ -1,0 +1,116 @@
+.book-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+}
+
+.book-wrapper:hover {
+  z-index: 5;
+}
+
+.book {
+  position: relative;
+  width: 100%;
+  height: 230px;
+  background: var(--c-surface-alt);
+  box-shadow: 4px 6px 0 var(--c-primary-dark);
+  transform-style: preserve-3d;
+  perspective: 2000px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--c-secondary), var(--c-primary-dark));
+  border-left: 6px solid var(--c-ice);
+  transform-origin: 0;
+  transition: transform 0.45s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  text-align: center;
+  color: var(--c-white);
+  gap: 10px;
+  backface-visibility: hidden;
+}
+
+.book:hover .cover,
+.book-wrapper:focus-visible .cover {
+  transform: rotateY(-82deg);
+}
+
+.cover-icon {
+  font-size: 34px;
+  width: 34px;
+  height: 34px;
+}
+
+.cover-title {
+  font-family: var(--f-serif);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.book-inner {
+  width: 100%;
+  height: 100%;
+  background: var(--c-surface-alt);
+  padding: 14px 14px 14px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: right;
+  border: 1px solid var(--c-primary);
+}
+
+.book-inner-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.book-inner-meta {
+  font-family: var(--f-condensed);
+  color: var(--c-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.book-inner-title {
+  font-family: var(--f-serif);
+  color: var(--c-primary-dark);
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+
+.book-inner-author {
+  color: var(--c-primary);
+  font-size: 11.5px;
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
+.book-inner-year {
+  color: var(--c-primary-dark);
+  font-size: 11px;
+}
+
+.book-inner-footer {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}

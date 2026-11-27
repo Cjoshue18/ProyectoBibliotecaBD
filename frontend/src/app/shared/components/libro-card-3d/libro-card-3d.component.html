@@ -1,0 +1,24 @@
+<div class="book-wrapper" (click)="onClick()" (keydown.enter)="onClick()" tabindex="0" role="button">
+  <div class="book">
+    <div class="book-inner">
+      <div class="book-inner-top">
+        <div class="book-inner-meta">{{ resumen().facultadPrincipal }}</div>
+        <div class="book-inner-title">{{ libro().titulo }}</div>
+        <div class="book-inner-author">{{ autoresTexto() }}</div>
+        @if (resumen().edicionPrincipal; as ed) {
+          <div class="book-inner-year">Ed. {{ ed.numeroEdicion }} · {{ ed.anioPublicacion }}</div>
+        }
+      </div>
+      <div class="book-inner-footer">
+        <span class="badge" [class.badge-ok]="resumen().disponibles > 0" [class.badge-warn]="resumen().disponibles === 0">
+          {{ resumen().disponibles }}/{{ resumen().total }} disp.
+        </span>
+      </div>
+    </div>
+
+    <div class="cover">
+      <mat-icon class="cover-icon">menu_book</mat-icon>
+      <div class="cover-title">{{ libro().titulo }}</div>
+    </div>
+  </div>
+</div>

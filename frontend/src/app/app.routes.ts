@@ -9,7 +9,10 @@ import { encargadoGuard, lectorGuard } from './core/guards/role.guard';
 export class RutaEnConstruccionComponent {}
 
 export const routes: Routes = [
-  { path: '', component: RutaEnConstruccionComponent },
+  {
+    path: '',
+    loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent),
+  },
   { path: 'catalogo', component: RutaEnConstruccionComponent },
   { path: 'sobre-biblioteca', component: RutaEnConstruccionComponent },
   { path: 'login', component: RutaEnConstruccionComponent },

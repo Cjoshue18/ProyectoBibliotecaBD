@@ -1,0 +1,41 @@
+<div class="ficha-shell">
+  <div class="ficha-header">
+    <div>
+      <div class="kicker-caps">Ficha Bibliográfica</div>
+      <h2 class="ficha-title">{{ libro.titulo }}</h2>
+      <p class="ficha-authors">Autores: {{ autoresTexto }}</p>
+    </div>
+    <button type="button" class="btn-secondary-urp" mat-dialog-close>Cerrar</button>
+  </div>
+
+  <div class="ficha-body">
+    @for (ed of libro.ediciones; track ed.isbn) {
+      <div class="edicion-box">
+        <div class="edicion-head">
+          <span>Edición {{ ed.numeroEdicion }} ({{ ed.anioPublicacion }}) · {{ ed.nombreEditorial }}</span>
+          <span class="badge badge-info">ISBN {{ ed.isbn }}</span>
+        </div>
+
+        @for (ej of ed.ejemplares; track ej.numeroCopia) {
+          <div class="ejemplar-row">
+            <div>
+              <strong>Copia #{{ ej.numeroCopia }}</strong> · {{ ej.nombreFacultad }} · Estado físico: {{ ej.tipoEstadoFisico }}
+            </div>
+            <div class="ejemplar-actions">
+              <span class="badge" [class.badge-ok]="ej.disponible && ej.tipoEstadoFisico !== 'En Reparacion'" [class.badge-warn]="!ej.disponible || ej.tipoEstadoFisico === 'En Reparacion'">
+                {{ ej.disponible && ej.tipoEstadoFisico !== 'En Reparacion' ? 'Disponible' : 'No disponible' }}
+              </span>
+              @if (ej.disponible && ej.tipoEstadoFisico !== 'En Reparacion') {
+                <button type="button" class="btn-primary-urp" (click)="prestarEjemplar(ed.isbn, ej.numeroCopia)">
+                  Prestar
+                </button>
+              }
+            </div>
+          </div>
+        } @empty {
+          <p class="empty-note">No hay ejemplares registrados para esta edición.</p>
+        }
+      </div>
+    }
+  </div>
+</div>

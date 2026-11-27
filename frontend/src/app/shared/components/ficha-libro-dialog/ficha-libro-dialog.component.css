@@ -1,0 +1,73 @@
+.ficha-shell {
+  padding: 22px;
+  border-top: 5px solid var(--c-secondary);
+  background: var(--c-white);
+}
+
+.ficha-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  border-bottom: 1px solid var(--c-ice);
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.ficha-title {
+  font-family: var(--f-serif);
+  color: var(--c-primary);
+  font-size: 22px;
+  margin: 4px 0;
+}
+
+.ficha-authors {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-secondary);
+}
+
+.ficha-body {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.edicion-box {
+  border: 1px solid var(--c-ice);
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  background: var(--c-surface-alt);
+}
+
+.edicion-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--c-primary);
+  margin-bottom: 10px;
+}
+
+.ejemplar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid var(--c-ice);
+  font-size: 13.5px;
+}
+
+.ejemplar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.empty-note {
+  font-size: 13px;
+  color: var(--c-primary);
+}

@@ -1,0 +1,95 @@
+<section class="hero">
+  <div class="container">
+    <h1>Bienvenido a la Biblioteca URP</h1>
+    <p>Consulta el acervo universitario, verifica disponibilidad por facultad y gestiona tus préstamos</p>
+  </div>
+</section>
+
+<section class="chevron-band">
+  <div class="container">
+    <h2 class="section-serif">Catálogo Destacado</h2>
+    <div class="kicker-caps">Primeros 5 títulos</div>
+    <div class="bar-short"></div>
+  </div>
+
+  <div class="overlap-zone">
+    <div class="container">
+      @if (errorCarga()) {
+        <div class="alert-box alert-err">{{ errorCarga() }}</div>
+      } @else if (cargando()) {
+        <div class="alert-box">Cargando catálogo destacado...</div>
+      } @else {
+        <div class="books-3d-grid">
+          @for (libro of destacados(); track libro.idLibro) {
+            <app-libro-card-3d [libro]="libro" (seleccionar)="abrirFicha($event)" />
+          }
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="programs-band">
+  <div class="container">
+    <h2>Top Libros por Facultad</h2>
+    <div class="bar-short bar-short-ice"></div>
+
+    @if (facultadActual(); as fac) {
+      <div class="carousel-shell">
+        <button type="button" class="nav-arrow" aria-label="Facultad anterior" (click)="cambiarFacultad(-1)">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <div class="programs-split">
+          <div class="programs-photo" [style.background]="fondoFacultadActual()">
+            <div class="fac-kicker">Facultad {{ facultadIdx() + 1 }} de {{ facultades().length }}</div>
+            <div>
+              <h3 class="fac-title">{{ fac.nombreFacultad }}</h3>
+              <p class="fac-sub">Top libros destacados y ejemplares asignados a esta facultad.</p>
+            </div>
+          </div>
+
+          <div class="events-panel">
+            <div>
+              @for (item of topLibrosFacultad(); track item.libro.idLibro; let i = $index) {
+                <div class="prog-row" (click)="abrirFicha(item.libro)" role="button" tabindex="0" (keydown.enter)="abrirFicha(item.libro)">
+                  <div class="prog-date">TOP #{{ i + 1 }}</div>
+                  <div>
+                    <div class="prog-title">{{ item.libro.titulo }}</div>
+                    <div class="prog-meta">
+                      {{ item.autores }} · {{ item.disponibles }}/{{ item.total }} copia(s) disponible(s)
+                    </div>
+                  </div>
+                </div>
+              } @empty {
+                <p class="empty-fac">No hay ejemplares asignados a esta facultad.</p>
+              }
+            </div>
+
+            <div class="panel-footer">
+              <button type="button" class="btn-primary-urp" (click)="verCatalogoDeFacultad()">
+                Ver catálogo de esta facultad
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="nav-arrow" aria-label="Siguiente facultad" (click)="cambiarFacultad(1)">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+
+      <div class="fac-dots">
+        @for (f of facultades(); track f.idFacultad; let i = $index) {
+          <button
+            type="button"
+            class="fac-dot"
+            [class.active]="i === facultadIdx()"
+            [attr.aria-label]="'Facultad ' + (i + 1)"
+            (click)="seleccionarFacultad(i)"
+          ></button>
+        }
+      </div>
+    }
+  </div>
+</section>
