@@ -24,10 +24,3 @@
 .full-w {
   width: 100%;
 }
-
-.demo-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
-}

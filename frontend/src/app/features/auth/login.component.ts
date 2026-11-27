@@ -42,12 +42,6 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  rellenarDemoLector(usuario: string, clave: string): void {
-    this.usuarioLector = usuario;
-    this.claveLector = clave;
-    this.errorMensaje.set('');
-  }
-
   ingresarLector(): void {
     const u = this.usuarioLector.trim();
     const c = this.claveLector.trim();

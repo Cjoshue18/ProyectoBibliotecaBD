@@ -33,25 +33,13 @@
           <form (ngSubmit)="ingresarLector()" class="login-form">
             <mat-form-field appearance="outline" class="full-w">
               <mat-label>Usuario (Código de Alumno o DNI)</mat-label>
-              <input matInput name="usuarioLector" [(ngModel)]="usuarioLector" placeholder="Ej. 202210101 o 40123456" />
+              <input matInput name="usuarioLector" [(ngModel)]="usuarioLector" placeholder="Ingresa tu código de alumno o DNI" />
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-w">
               <mat-label>Contraseña (N° de Documento)</mat-label>
-              <input matInput type="password" name="claveLector" [(ngModel)]="claveLector" placeholder="Ej. 71234561" />
+              <input matInput type="password" name="claveLector" [(ngModel)]="claveLector" placeholder="Ingresa tu número de documento" />
             </mat-form-field>
-
-            <div class="demo-row">
-              <button type="button" class="btn-secondary-urp" (click)="rellenarDemoLector('202210101', '71234561')">
-                Demo Alumno Activo
-              </button>
-              <button type="button" class="btn-secondary-urp" (click)="rellenarDemoLector('202110303', '71234563')">
-                Demo Alumno Suspendido
-              </button>
-              <button type="button" class="btn-secondary-urp" (click)="rellenarDemoLector('40123456', '40123456')">
-                Demo Docente
-              </button>
-            </div>
 
             <button type="submit" class="btn-primary-urp full-w" [disabled]="cargando()">
               {{ cargando() ? 'Validando...' : 'Ingresar a Mi Cuenta' }}
