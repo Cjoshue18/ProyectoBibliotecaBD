@@ -1,0 +1,109 @@
+@if (feedbackExito()) {
+  <div class="alert-box alert-ok">{{ feedbackExito() }}</div>
+}
+@if (feedbackError()) {
+  <div class="alert-box alert-err">{{ feedbackError() }}</div>
+}
+
+<div class="card-flat">
+  <div class="card-header-row">
+    <h2 class="section-serif heading-flush">Lista Completa de Préstamos</h2>
+    <a class="btn-primary-urp" routerLink="../registrar-prestamo" style="text-decoration: none;">+ Registrar Préstamo</a>
+  </div>
+
+  <div class="urp-field">
+    <label for="encSearchPrestamos">Buscar préstamo por lector, libro o ISBN</label>
+    <input
+      id="encSearchPrestamos"
+      class="urp-input"
+      type="text"
+      [ngModel]="busqueda()"
+      (ngModelChange)="onBusquedaChange($event)"
+      placeholder="Filtrar..."
+    />
+  </div>
+
+  @if (cargando()) {
+    <div class="alert-box">Cargando préstamos...</div>
+  } @else if (paginados().length === 0) {
+    <div class="alert-box">No se encontraron préstamos.</div>
+  } @else {
+    <div class="table-wrap">
+      <table mat-table [dataSource]="paginados()" class="full-table">
+        <ng-container matColumnDef="idPrestamo">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let p">#{{ p.idPrestamo }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nombreLector">
+          <th mat-header-cell *matHeaderCellDef>Lector</th>
+          <td mat-cell *matCellDef="let p">{{ p.nombreLector }}</td>
+        </ng-container>
+        <ng-container matColumnDef="tituloLibro">
+          <th mat-header-cell *matHeaderCellDef>Libro / Ejemplar</th>
+          <td mat-cell *matCellDef="let p">
+            <strong>{{ p.tituloLibro }}</strong><br />
+            <small>{{ p.isbn }} (#{{ p.numeroCopia }})</small>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="tipoPrestamo">
+          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <td mat-cell *matCellDef="let p">{{ p.tipoPrestamo }}</td>
+        </ng-container>
+        <ng-container matColumnDef="fechaVencimiento">
+          <th mat-header-cell *matHeaderCellDef>Vencimiento</th>
+          <td mat-cell *matCellDef="let p">{{ p.fechaVencimiento | date: 'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let p">
+            <span class="badge" [class.badge-warn]="p.estadoDerivado === 'Vencido'" [class.badge-info]="p.estadoDerivado === 'Devuelto'" [class.badge-ok]="p.estadoDerivado === 'Activo'">
+              {{ p.estadoDerivado }}
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="trazabilidad">
+          <th mat-header-cell *matHeaderCellDef>Deuda / Pago</th>
+          <td mat-cell *matCellDef="let p">
+            @if (deudaPorPrestamo().get(p.idPrestamo); as deuda) {
+              <div class="inline-actions">
+                <button type="button" class="btn-secondary-urp" (click)="verDeuda(p.idPrestamo)">
+                  Ver deuda ({{ deuda.estadoDeuda }})
+                </button>
+                @if (pagoPorDeuda().get(deuda.idDeuda)) {
+                  <button type="button" class="btn-secondary-urp" (click)="verComprobante(p.idPrestamo)">
+                    Ver comprobante
+                  </button>
+                }
+              </div>
+            } @else {
+              <span>Sin deuda</span>
+            }
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let p">
+            @if (!p.fechaDevolucionReal) {
+              <button type="button" class="btn-primary-urp" [disabled]="procesando()" (click)="devolver(p)">
+                Devolver
+              </button>
+            } @else {
+              <span>{{ p.fechaDevolucionReal | date: 'dd/MM/yy HH:mm' }}</span>
+            }
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+      </table>
+    </div>
+  }
+
+  <mat-paginator
+    [length]="filtrados().length"
+    [pageIndex]="pageIndex()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[6, 12, 20]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  />
+</div>

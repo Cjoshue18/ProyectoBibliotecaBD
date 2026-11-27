@@ -1,0 +1,41 @@
+<div class="deuda-shell">
+  <div class="deuda-head">
+    <div>
+      <div class="kicker-caps">Detalle de Deuda</div>
+      <h2 class="deuda-title">Deuda #{{ data.deuda.idDeuda }} ({{ data.deuda.estadoDeuda }})</h2>
+    </div>
+    <button type="button" class="btn-secondary-urp" mat-dialog-close>Cerrar</button>
+  </div>
+
+  <div class="kpi-grid deuda-kpis">
+    <div class="kpi-box">
+      <div class="kpi-lbl">Monto Calculado</div>
+      <div class="kpi-val">{{ data.deuda.montoCalculado | currency: 'PEN' : 'S/ ' }}</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-lbl">Tarifa Diaria</div>
+      <div class="kpi-val">{{ data.deuda.tarifaDiaria | currency: 'PEN' : 'S/ ' }}</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-lbl">Días de Retraso</div>
+      <div class="kpi-val">{{ data.deuda.diasRetraso }}</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-lbl">Fin Suspensión</div>
+      <div class="kpi-val">
+        {{ data.deuda.fechaFinSuspension ? (data.deuda.fechaFinSuspension | date: 'dd/MM/yyyy') : 'Pendiente devolución' }}
+      </div>
+    </div>
+  </div>
+
+  <div class="deuda-info">
+    <p><strong>Lector:</strong> {{ data.deuda.nombreLector }}</p>
+    <p><strong>Préstamo origen:</strong> #{{ data.deuda.idPrestamo }} · {{ data.deuda.tituloLibro }}</p>
+    @if (data.pago; as pg) {
+      <p class="pago-ok">
+        <strong>Pago asociado:</strong> Recibo {{ pg.numeroRecibo }} ·
+        {{ pg.montoPagado | currency: 'PEN' : 'S/ ' }} ({{ pg.fechaPago | date: 'dd/MM/yyyy HH:mm' }})
+      </p>
+    }
+  </div>
+</div>

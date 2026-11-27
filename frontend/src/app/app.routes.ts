@@ -77,8 +77,20 @@ export const routes: Routes = [
             (m) => m.RegistrarPrestamoComponent,
           ),
       },
-      { path: 'registrar-pago', component: RutaEnConstruccionComponent },
-      { path: 'prestamos', component: RutaEnConstruccionComponent },
+      {
+        path: 'registrar-pago',
+        loadComponent: () =>
+          import('./features/encargado/registrar-pago.component').then(
+            (m) => m.RegistrarPagoComponent,
+          ),
+      },
+      {
+        path: 'prestamos',
+        loadComponent: () =>
+          import('./features/encargado/lista-prestamos.component').then(
+            (m) => m.ListaPrestamosComponent,
+          ),
+      },
       { path: 'lectores', component: RutaEnConstruccionComponent },
       { path: 'catalogo', component: RutaEnConstruccionComponent },
       { path: 'autores-editoriales', component: RutaEnConstruccionComponent },

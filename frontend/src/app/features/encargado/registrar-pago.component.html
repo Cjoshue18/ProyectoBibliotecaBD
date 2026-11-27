@@ -1,0 +1,138 @@
+@if (feedbackExito()) {
+  <div class="alert-box alert-ok">{{ feedbackExito() }}</div>
+}
+@if (feedbackError()) {
+  <div class="alert-box alert-err">{{ feedbackError() }}</div>
+}
+
+<div class="card-flat">
+  <div class="card-header-row">
+    <h2 class="section-serif heading-flush">Registrar Pago de Deuda</h2>
+  </div>
+
+  <div class="kicker-caps" style="margin-bottom: 10px;">Buscar Deudas Pendientes (3 Buscadores)</div>
+  <div class="form-grid">
+    <div class="urp-field">
+      <label for="pagoBuscDoc">1. Código Alumno o DNI</label>
+      <input
+        id="pagoBuscDoc"
+        class="urp-input"
+        type="text"
+        [ngModel]="buscDoc()"
+        (ngModelChange)="onFiltroChange('doc', $event)"
+        placeholder="Ej. 202110303 o 71234563"
+      />
+    </div>
+    <div class="urp-field">
+      <label for="pagoBuscLector">2. Nombre del Lector</label>
+      <input
+        id="pagoBuscLector"
+        class="urp-input"
+        type="text"
+        [ngModel]="buscLector()"
+        (ngModelChange)="onFiltroChange('lector', $event)"
+        placeholder="Ej. Mateo Paredes"
+      />
+    </div>
+    <div class="urp-field">
+      <label for="pagoBuscLibro">3. Nombre del Ejemplar / Libro</label>
+      <input
+        id="pagoBuscLibro"
+        class="urp-input"
+        type="text"
+        [ngModel]="buscLibro()"
+        (ngModelChange)="onFiltroChange('libro', $event)"
+        placeholder="Ej. Arquitectura"
+      />
+    </div>
+  </div>
+
+  @if (cargando()) {
+    <div class="alert-box">Cargando deudas pendientes...</div>
+  } @else if (paginadas().length === 0) {
+    <div class="alert-box">No hay deudas pendientes que coincidan con la búsqueda.</div>
+  } @else {
+    <div class="table-wrap">
+      <table mat-table [dataSource]="paginadas()" class="full-table">
+        <ng-container matColumnDef="idDeuda">
+          <th mat-header-cell *matHeaderCellDef>Deuda</th>
+          <td mat-cell *matCellDef="let d">#{{ d.idDeuda }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nombreLector">
+          <th mat-header-cell *matHeaderCellDef>Lector</th>
+          <td mat-cell *matCellDef="let d">{{ d.nombreLector }}</td>
+        </ng-container>
+        <ng-container matColumnDef="tituloLibro">
+          <th mat-header-cell *matHeaderCellDef>Libro</th>
+          <td mat-cell *matCellDef="let d">{{ d.tituloLibro }}</td>
+        </ng-container>
+        <ng-container matColumnDef="montoCalculado">
+          <th mat-header-cell *matHeaderCellDef>Monto</th>
+          <td mat-cell *matCellDef="let d">
+            {{ d.montoCalculado | currency: 'PEN' : 'S/ ' }} ({{ d.diasRetraso }}d)
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="fechaFinSuspension">
+          <th mat-header-cell *matHeaderCellDef>Suspensión</th>
+          <td mat-cell *matCellDef="let d">
+            {{ d.fechaFinSuspension ? (d.fechaFinSuspension | date: 'dd/MM/yyyy') : 'Pendiente devolución' }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="accion">
+          <th mat-header-cell *matHeaderCellDef>Acción</th>
+          <td mat-cell *matCellDef="let d">
+            <div class="inline-actions">
+              <button type="button" class="btn-primary-urp" (click)="seleccionarDeuda(d)">Cobrar</button>
+              <button type="button" class="btn-secondary-urp" [disabled]="procesando()" (click)="anularDeuda(d)">
+                Anular
+              </button>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+      </table>
+    </div>
+  }
+
+  <mat-paginator
+    [length]="filtradas().length"
+    [pageIndex]="pageIndex()"
+    [pageSize]="5"
+    [hidePageSize]="true"
+    (page)="onPageChange($event)"
+  />
+</div>
+
+@if (deudaSeleccionada(); as sel) {
+  <div class="card-flat">
+    <div class="card-header-row">
+      <h3 class="section-serif heading-flush">Emitir Comprobante — Deuda #{{ sel.idDeuda }}</h3>
+      <button type="button" class="btn-secondary-urp" (click)="deudaSeleccionada.set(null)">Cancelar</button>
+    </div>
+
+    <div class="alert-box">
+      <strong>Lector:</strong> {{ sel.nombreLector }} ·
+      <strong>Libro:</strong> {{ sel.tituloLibro }} ·
+      <strong>Total a pagar:</strong> {{ sel.montoCalculado | currency: 'PEN' : 'S/ ' }}
+      ({{ sel.diasRetraso }} día(s) × {{ sel.tarifaDiaria | currency: 'PEN' : 'S/ ' }})
+    </div>
+
+    <div class="form-grid">
+      <div class="urp-field">
+        <label for="pagoNumeroRecibo">Número de Recibo de Caja</label>
+        <input
+          id="pagoNumeroRecibo"
+          class="urp-input"
+          type="text"
+          [(ngModel)]="numeroRecibo"
+          placeholder="Ej. REC-2026-0002"
+        />
+      </div>
+    </div>
+
+    <button type="button" class="btn-success-urp" [disabled]="procesando()" (click)="confirmarPago()">
+      {{ procesando() ? 'Procesando...' : 'Registrar Pago Íntegro' }}
+    </button>
+  </div>
+}
