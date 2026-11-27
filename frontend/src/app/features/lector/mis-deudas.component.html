@@ -1,0 +1,93 @@
+<div class="card-flat">
+  <div class="card-header-row">
+    <h2 class="section-serif heading-flush">Mis Deudas</h2>
+    @if (filtroIdDeuda(); as idFiltro) {
+      <div class="inline-actions">
+        <span class="badge badge-info">Filtrado por Deuda #{{ idFiltro }}</span>
+        <button type="button" class="btn-secondary-urp" (click)="quitarFiltro()">Quitar filtro</button>
+      </div>
+    }
+  </div>
+
+  @if (errorMensaje()) {
+    <div class="alert-box alert-err">{{ errorMensaje() }}</div>
+  }
+
+  <div class="urp-field">
+    <label for="lecSearchDeudas">Buscar en mis deudas</label>
+    <input
+      id="lecSearchDeudas"
+      class="urp-input"
+      type="text"
+      [ngModel]="busqueda()"
+      (ngModelChange)="onBusquedaChange($event)"
+      placeholder="Buscar por libro o estado..."
+    />
+  </div>
+
+  @if (cargando()) {
+    <div class="alert-box">Cargando deudas...</div>
+  } @else if (paginadas().length === 0) {
+    <div class="alert-box">No se encontraron deudas.</div>
+  } @else {
+    <div class="table-wrap">
+      <table mat-table [dataSource]="paginadas()" class="full-table">
+        <ng-container matColumnDef="idDeuda">
+          <th mat-header-cell *matHeaderCellDef>Deuda</th>
+          <td mat-cell *matCellDef="let d">#{{ d.idDeuda }}</td>
+        </ng-container>
+        <ng-container matColumnDef="tituloLibro">
+          <th mat-header-cell *matHeaderCellDef>Libro</th>
+          <td mat-cell *matCellDef="let d">{{ d.tituloLibro }}</td>
+        </ng-container>
+        <ng-container matColumnDef="montoCalculado">
+          <th mat-header-cell *matHeaderCellDef>Monto / Tarifa</th>
+          <td mat-cell *matCellDef="let d">
+            {{ d.montoCalculado | currency: 'PEN' : 'S/ ' }}
+            ({{ d.diasRetraso }}d × {{ d.tarifaDiaria | currency: 'PEN' : 'S/ ' }})
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="fechaFinSuspension">
+          <th mat-header-cell *matHeaderCellDef>Fin Suspensión</th>
+          <td mat-cell *matCellDef="let d">
+            {{ d.fechaFinSuspension ? (d.fechaFinSuspension | date: 'dd/MM/yyyy') : 'Al devolver' }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="estadoDeuda">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let d">
+            <span class="badge" [class.badge-warn]="d.estadoDeuda === 'Pendiente'" [class.badge-ok]="d.estadoDeuda !== 'Pendiente'">
+              {{ d.estadoDeuda }}
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="trazabilidad">
+          <th mat-header-cell *matHeaderCellDef>Trazabilidad</th>
+          <td mat-cell *matCellDef="let d">
+            <div class="inline-actions">
+              <button type="button" class="btn-secondary-urp" (click)="verPrestamo(d.idPrestamo)">
+                Ver préstamo
+              </button>
+              @if (idsConPago().has(d.idDeuda)) {
+                <button type="button" class="btn-secondary-urp" (click)="verPago(d.idDeuda)">
+                  Ver pago
+                </button>
+              }
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+      </table>
+    </div>
+  }
+
+  <mat-paginator
+    [length]="filtradas().length"
+    [pageIndex]="pageIndex()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  />
+</div>

@@ -37,9 +37,21 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/lector/resumen-lector.component').then((m) => m.ResumenLectorComponent),
       },
-      { path: 'prestamos', component: RutaEnConstruccionComponent },
-      { path: 'deudas', component: RutaEnConstruccionComponent },
-      { path: 'comprobantes', component: RutaEnConstruccionComponent },
+      {
+        path: 'prestamos',
+        loadComponent: () =>
+          import('./features/lector/mis-prestamos.component').then((m) => m.MisPrestamosComponent),
+      },
+      {
+        path: 'deudas',
+        loadComponent: () =>
+          import('./features/lector/mis-deudas.component').then((m) => m.MisDeudasComponent),
+      },
+      {
+        path: 'comprobantes',
+        loadComponent: () =>
+          import('./features/lector/mis-comprobantes.component').then((m) => m.MisComprobantesComponent),
+      },
     ],
   },
   { path: 'encargado', canActivate: [encargadoGuard], component: RutaEnConstruccionComponent },

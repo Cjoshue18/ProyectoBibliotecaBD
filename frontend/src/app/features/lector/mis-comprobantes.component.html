@@ -1,0 +1,78 @@
+<div class="card-flat">
+  <div class="card-header-row">
+    <h2 class="section-serif heading-flush">Pagos y Comprobantes</h2>
+    @if (filtroIdDeuda(); as idFiltro) {
+      <div class="inline-actions">
+        <span class="badge badge-info">Pago de Deuda #{{ idFiltro }}</span>
+        <button type="button" class="btn-secondary-urp" (click)="quitarFiltro()">Quitar filtro</button>
+      </div>
+    }
+  </div>
+
+  @if (errorMensaje()) {
+    <div class="alert-box alert-err">{{ errorMensaje() }}</div>
+  }
+
+  <div class="urp-field">
+    <label for="lecSearchPagos">Buscar comprobante o pago</label>
+    <input
+      id="lecSearchPagos"
+      class="urp-input"
+      type="text"
+      [ngModel]="busqueda()"
+      (ngModelChange)="onBusquedaChange($event)"
+      placeholder="Buscar por número de recibo o libro..."
+    />
+  </div>
+
+  @if (cargando()) {
+    <div class="alert-box">Cargando comprobantes...</div>
+  } @else if (paginados().length === 0) {
+    <div class="alert-box">No se encontraron comprobantes.</div>
+  } @else {
+    <div class="table-wrap">
+      <table mat-table [dataSource]="paginados()" class="full-table">
+        <ng-container matColumnDef="numeroRecibo">
+          <th mat-header-cell *matHeaderCellDef>Recibo</th>
+          <td mat-cell *matCellDef="let r"><strong>{{ r.pago.numeroRecibo }}</strong></td>
+        </ng-container>
+        <ng-container matColumnDef="fechaPago">
+          <th mat-header-cell *matHeaderCellDef>Fecha Pago</th>
+          <td mat-cell *matCellDef="let r">{{ r.pago.fechaPago | date: 'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="montoPagado">
+          <th mat-header-cell *matHeaderCellDef>Monto Pagado</th>
+          <td mat-cell *matCellDef="let r">{{ r.pago.montoPagado | currency: 'PEN' : 'S/ ' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="tituloLibro">
+          <th mat-header-cell *matHeaderCellDef>Libro</th>
+          <td mat-cell *matCellDef="let r">{{ r.tituloLibro }}</td>
+        </ng-container>
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let r">
+            <div class="inline-actions">
+              <button type="button" class="btn-secondary-urp" (click)="verComprobante(r)">
+                Ver comprobante
+              </button>
+              <button type="button" class="btn-secondary-urp" (click)="verDeudaOrigen(r.pago.idDeuda)">
+                Ver deuda origen
+              </button>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+      </table>
+    </div>
+  }
+
+  <mat-paginator
+    [length]="filtrados().length"
+    [pageIndex]="pageIndex()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  />
+</div>

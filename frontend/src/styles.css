@@ -111,6 +111,31 @@ button, input, select { font-family: var(--f-sans); }
   padding: 6px 12px; font-weight: 700; font-size: 12.5px; cursor: pointer;
 }
 .btn-secondary-urp:hover { background: var(--c-surface-alt); border-color: var(--c-secondary); color: var(--c-secondary); }
+.btn-danger-urp {
+  background: var(--c-danger); color: var(--c-white); border: 1px solid var(--c-danger);
+  padding: 6px 12px; font-weight: 700; font-size: 12px; cursor: pointer;
+}
+.btn-success-urp {
+  background: var(--c-success); color: var(--c-white); border: 1px solid var(--c-success);
+  padding: 6px 12px; font-weight: 700; font-size: 12px; cursor: pointer;
+}
+.btn-link-inline {
+  background: transparent; border: none; color: var(--c-secondary);
+  font-weight: 800; cursor: pointer; text-decoration: underline; font-size: 13px;
+}
+
+.urp-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+.urp-field label {
+  font-family: var(--f-condensed); font-size: 13px; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--c-primary); font-weight: 700;
+}
+.urp-input {
+  width: 100%; border: 1px solid var(--c-primary); padding: 9px 11px;
+  background: var(--c-white); color: var(--c-primary-dark); font-size: 14px; outline: none;
+}
+.urp-input:focus { border-color: var(--c-secondary); box-shadow: inset 0 0 0 1px var(--c-secondary); }
+.heading-flush { margin-bottom: 0; }
+.inline-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
 @media (max-width: 980px) {
   .layout-sidebar-left, .layout-sidebar-right { grid-template-columns: 1fr; }
