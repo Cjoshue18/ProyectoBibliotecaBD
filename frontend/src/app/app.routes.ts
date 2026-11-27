@@ -21,7 +21,10 @@ export const routes: Routes = [
     path: 'sobre-biblioteca',
     loadComponent: () => import('./features/sobre/sobre.component').then((m) => m.SobreComponent),
   },
-  { path: 'login', component: RutaEnConstruccionComponent },
+  {
+    path: 'login',
+    loadComponent: () => import('./features/auth/login.component').then((m) => m.LoginComponent),
+  },
   { path: 'lector', canActivate: [lectorGuard], component: RutaEnConstruccionComponent },
   { path: 'encargado', canActivate: [encargadoGuard], component: RutaEnConstruccionComponent },
   { path: '**', redirectTo: '' },

@@ -1,0 +1,33 @@
+.login-container {
+  max-width: 560px;
+}
+
+.login-title {
+  margin-bottom: 0;
+}
+
+.tab-panel-pad {
+  padding-top: 18px;
+}
+
+.hint-text {
+  font-size: 13.5px;
+  margin-bottom: 14px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.full-w {
+  width: 100%;
+}
+
+.demo-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
