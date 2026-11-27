@@ -1,0 +1,33 @@
+.sobre-container {
+  max-width: 880px;
+}
+
+.sobre-title {
+  margin-bottom: 0;
+}
+
+.policy-section {
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--c-ice);
+}
+
+.policy-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.policy-section h3 {
+  font-family: var(--f-serif);
+  font-size: 19px;
+  color: var(--c-primary);
+  margin-bottom: 8px;
+}
+
+.policy-section p {
+  font-size: 14.5px;
+  color: var(--c-primary-dark);
+  margin-bottom: 8px;
+  line-height: 1.7;
+}

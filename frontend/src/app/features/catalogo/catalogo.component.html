@@ -1,0 +1,81 @@
+<div class="app-page">
+  <div class="container">
+    <div class="layout-sidebar-left">
+      <aside class="card-flat aside-filters">
+        <div class="card-header-row">
+          <h2 class="section-serif filter-heading">Filtros</h2>
+          <button type="button" class="btn-link-inline" (click)="limpiarFiltros()">Limpiar</button>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">Búsqueda</div>
+          <input
+            class="urp-input"
+            type="text"
+            [ngModel]="busqueda()"
+            (ngModelChange)="onBusquedaChange($event)"
+            placeholder="Título, autor o ISBN..."
+          />
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">Disponibilidad</div>
+          <mat-checkbox
+            [checked]="soloDisponibles()"
+            (change)="onSoloDisponiblesChange($event.checked)"
+          >
+            Solo con ejemplares disponibles (no prestados)
+          </mat-checkbox>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">Facultad</div>
+          <div class="fac-check-list">
+            @for (f of facultades(); track f.idFacultad) {
+              <mat-checkbox
+                [checked]="facultadesSeleccionadas().has(f.idFacultad)"
+                (change)="toggleFacultad(f.idFacultad, $event.checked)"
+              >
+                {{ f.nombreFacultad }}
+              </mat-checkbox>
+            }
+          </div>
+        </div>
+      </aside>
+
+      <section>
+        <div class="card-flat">
+          <div class="card-header-row">
+            <div>
+              <div class="kicker-caps">Catálogo Completo</div>
+              <h2 class="section-serif results-heading">
+                Libros Registrados ({{ filtrados().length }})
+              </h2>
+            </div>
+          </div>
+
+          @if (cargando()) {
+            <div class="alert-box">Cargando catálogo...</div>
+          } @else if (paginados().length === 0) {
+            <div class="alert-box">No se encontraron libros que coincidan con los filtros seleccionados.</div>
+          } @else {
+            <div class="catalog-books-grid">
+              @for (libro of paginados(); track libro.idLibro) {
+                <app-libro-card-3d [libro]="libro" (seleccionar)="abrirFicha($event)" />
+              }
+            </div>
+          }
+
+          <mat-paginator
+            [length]="filtrados().length"
+            [pageIndex]="pageIndex()"
+            [pageSize]="pageSize()"
+            [pageSizeOptions]="[6, 9, 12]"
+            (page)="onPageChange($event)"
+            showFirstLastButtons
+          />
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

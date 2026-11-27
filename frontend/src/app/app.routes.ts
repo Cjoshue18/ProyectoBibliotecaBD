@@ -13,8 +13,14 @@ export const routes: Routes = [
     path: '',
     loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent),
   },
-  { path: 'catalogo', component: RutaEnConstruccionComponent },
-  { path: 'sobre-biblioteca', component: RutaEnConstruccionComponent },
+  {
+    path: 'catalogo',
+    loadComponent: () => import('./features/catalogo/catalogo.component').then((m) => m.CatalogoComponent),
+  },
+  {
+    path: 'sobre-biblioteca',
+    loadComponent: () => import('./features/sobre/sobre.component').then((m) => m.SobreComponent),
+  },
   { path: 'login', component: RutaEnConstruccionComponent },
   { path: 'lector', canActivate: [lectorGuard], component: RutaEnConstruccionComponent },
   { path: 'encargado', canActivate: [encargadoGuard], component: RutaEnConstruccionComponent },
