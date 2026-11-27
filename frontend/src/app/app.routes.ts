@@ -54,6 +54,35 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: 'encargado', canActivate: [encargadoGuard], component: RutaEnConstruccionComponent },
+  {
+    path: 'encargado',
+    canActivate: [encargadoGuard],
+    loadComponent: () =>
+      import('./features/encargado/encargado-layout.component').then(
+        (m) => m.EncargadoLayoutComponent,
+      ),
+    children: [
+      { path: '', redirectTo: 'acciones', pathMatch: 'full' },
+      {
+        path: 'acciones',
+        loadComponent: () =>
+          import('./features/encargado/acciones-rapidas.component').then(
+            (m) => m.AccionesRapidasComponent,
+          ),
+      },
+      {
+        path: 'registrar-prestamo',
+        loadComponent: () =>
+          import('./features/encargado/registrar-prestamo.component').then(
+            (m) => m.RegistrarPrestamoComponent,
+          ),
+      },
+      { path: 'registrar-pago', component: RutaEnConstruccionComponent },
+      { path: 'prestamos', component: RutaEnConstruccionComponent },
+      { path: 'lectores', component: RutaEnConstruccionComponent },
+      { path: 'catalogo', component: RutaEnConstruccionComponent },
+      { path: 'autores-editoriales', component: RutaEnConstruccionComponent },
+    ],
+  },
   { path: '**', redirectTo: '' },
 ];

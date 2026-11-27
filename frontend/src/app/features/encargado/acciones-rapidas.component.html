@@ -1,0 +1,43 @@
+@if (errorMensaje()) {
+  <div class="alert-box alert-err">{{ errorMensaje() }}</div>
+}
+
+<div class="card-flat">
+  <div class="card-header-row">
+    <div>
+      <div class="kicker-caps">Mostrador Central</div>
+      <h2 class="section-serif heading-flush">Operaciones de Atención</h2>
+    </div>
+    <div class="inline-actions">
+      <a class="btn-primary-urp" routerLink="../registrar-prestamo" style="text-decoration: none;">+ Registrar Préstamo</a>
+      <a class="btn-secondary-urp" routerLink="../registrar-pago" style="text-decoration: none;">+ Registrar Pago</a>
+    </div>
+  </div>
+
+  @if (cargando()) {
+    <div class="alert-box">Cargando resumen operativo...</div>
+  } @else {
+    <div class="kpi-grid">
+      <div class="kpi-box">
+        <div class="kpi-lbl">Préstamos Activos</div>
+        <div class="kpi-val">{{ activosCount() }}</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-lbl">Préstamos Vencidos</div>
+        <div class="kpi-val">{{ vencidosCount() }}</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-lbl">Deudas Pendientes</div>
+        <div class="kpi-val">{{ deudasPendientesCount() }}</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-lbl">Lectores Registrados</div>
+        <div class="kpi-val">{{ lectores().length }}</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-lbl">Títulos en Catálogo</div>
+        <div class="kpi-val">{{ libros().length }}</div>
+      </div>
+    </div>
+  }
+</div>
